@@ -113,7 +113,7 @@
             height: 240px;
             z-index: 5;
             cursor: pointer;
-            margin-top: 220px;
+            margin-top: 50px;
         }
 
         .envelope-wrapper {
@@ -127,6 +127,7 @@
             border-radius: 0 0 16px 16px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 30px rgba(217, 4, 41, 0.15);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
         }
 
         .envelope-container:hover .envelope-wrapper {
@@ -149,12 +150,14 @@
             background: linear-gradient(to bottom, var(--envelope-crimson), #9a031e);
             clip-path: polygon(0 20%, 50% 66%, 100% 20%);
             transform-origin: top;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
             z-index: 4;
         }
 
+        /* Clears the red background artifact instantly on open */
         .envelope-container.open .envelope-flap {
             transform: rotateX(180deg) translateY(45px);
+            opacity: 0;
             z-index: 1;
         }
 
@@ -179,9 +182,9 @@
 
         .giant-heart-letter {
             position: absolute;
-            top: 15px;
+            bottom: calc(50% - 120px);
             left: 50%;
-            transform: translateX(-50%) translateY(0) scale(0.3);
+            transform: translateX(-50%) translateY(0) scale(0.1);
             width: 350px; 
             height: 320px; 
             background: radial-gradient(circle, #e60026 20%, #7a0010 100%);
@@ -197,12 +200,14 @@
             border: 2px solid rgba(255, 255, 255, 0.2);
             transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s ease;
             box-sizing: border-box;
+            pointer-events: none; 
         }
 
-        .envelope-container.open .giant-heart-letter {
+        .envelope-container.open + .giant-heart-letter {
             opacity: 1;
-            transform: translateX(-50%) translateY(-270px) scale(1.15); 
-            z-index: 10;
+            transform: translateX(-50%) translateY(-140px) scale(1.15); 
+            z-index: 20;
+            pointer-events: auto; 
         }
 
         .heart-inner-text {
@@ -227,9 +232,12 @@
             display: none;
             box-shadow: 0 6px 15px rgba(0,0,0,0.3);
             margin-top: 15px;
+            cursor: pointer;
+            position: relative;
+            z-index: 30;
         }
 
-        .envelope-container.open .unlock-btn {
+        .envelope-container.open + .giant-heart-letter .unlock-btn {
             display: inline-block;
             animation: fadeIn 0.5s forwards 0.9s;
         }
@@ -237,7 +245,9 @@
         .instruction-text {
             font-size: 1.2rem;
             color: rgba(255,255,255,0.8);
-            margin-top: 40px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 10;
         }
 
         /* --- STAGE 3: Main Page Layout --- */
@@ -432,7 +442,7 @@
             z-index: 99999;
         }
 
-        /* --- CREATIVE COUTURE WISHES OVERLAY (15 SECONDS) --- */
+        /* --- CREATIVE COUTURE WISHES OVERLAY --- */
         #wishes-overlay {
             position: fixed;
             top: 0;
@@ -450,7 +460,6 @@
             overflow: hidden;
         }
 
-        /* Ethereal Floating Ambient Particles */
         .ambient-glow-orb {
             position: absolute;
             border-radius: 50%;
@@ -531,9 +540,8 @@
                 font-size: 0.75rem;
                 letter-spacing: 2px;
             }
-            /* Envelope screen adjustment helper for smaller heights */
-            .envelope-container {
-                margin-top: 160px;
+            .envelope-container.open + .giant-heart-letter {
+                transform: translateX(-50%) translateY(-110px) scale(0.95);
             }
         }
     </style>
@@ -550,14 +558,15 @@
             <div class="envelope-wrapper">
                 <div class="envelope-flap"></div>
                 <div class="heart-lock">❤️</div>
-                
-                <div class="giant-heart-letter">
-                    <strong>Proverbs 9:11</strong>
-                    <p class="heart-inner-text">For by me your days will be multiplied, and years of life will be added to you.</p></br>
-                    <button class="unlock-btn" onclick="revealMainSite(event)">Unlock Surprise ➔</button>
-                </div>
             </div>
         </div>
+        
+        <div class="giant-heart-letter" id="giantHeartLetter">
+            <strong>Proverbs 9:11</strong>
+            <p class="heart-inner-text">For by me your days will be multiplied, and years of life will be added to you.</p><br>
+            <button class="unlock-btn" onclick="revealMainSite(event)">Unlock Surprise ➔</button>
+        </div>
+
         <p class="instruction-text text-center" id="hintText">A special letter has arrived. Tap to open 👆🏿</p>
     </div>
 
@@ -793,7 +802,7 @@
                         clearInterval(moveSpark);
                         spark.remove();
                     }
-                }, 20);
+                }, 30);
             }
         }
     </script>
