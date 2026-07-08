@@ -32,7 +32,7 @@
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
             color: #fff;
-            transition: opacity 3s ease-in-out; /* Extended slow fade duration (15s - 12s = 3s fade) */
+            transition: opacity 3s ease-in-out;
         }
 
         .fade-out-page {
@@ -509,6 +509,33 @@
         @keyframes dreamReveal {
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* --- MEDIA QUERIES FOR MOBILE SIZES --- */
+        @media (max-width: 767.98px) {
+            #countdown {
+                font-size: 3.5rem;
+            }
+            .dream-text-container {
+                padding: 0 20px;
+            }
+            .dream-title {
+                font-size: 2.8rem;
+                margin-bottom: 20px;
+            }
+            .dream-paragraph {
+                font-size: 1.05rem;
+                line-height: 1.7;
+            }
+            .dream-footer {
+                margin-top: 30px;
+                font-size: 0.75rem;
+                letter-spacing: 2px;
+            }
+            /* Envelope screen adjustment helper for smaller heights */
+            .envelope-container {
+                margin-top: 160px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -676,7 +703,6 @@
 
         function revealMainSite(e) {
             e.stopPropagation(); 
-            // MUSIC IS NOT PAUSED HERE ANYMORE — it plays continuously forward!
             envelopeScreen.style.opacity = 0;
             setTimeout(() => { 
                 envelopeScreen.style.display = 'none'; 
@@ -694,21 +720,17 @@
                 if (!centerpiece.classList.contains('lit')) {
                     centerpiece.classList.add('lit');
                     
-                    // Fire the fireworks show!
                     executeFireworkExplosion();
                     
-                    // Display Wishes Overlay after explosion peak (1 second delay)
                     setTimeout(() => {
                         const wishesOverlay = document.getElementById('wishes-overlay');
                         wishesOverlay.style.display = 'flex';
                         setTimeout(() => wishesOverlay.style.opacity = 1, 50);
                         
-                        // Slowly fade the entire page when hitting 12 seconds
                         setTimeout(() => {
                             document.body.classList.add('fade-out-page');
                         }, 15000);
 
-                        // Complete redirection at exactly 15 seconds
                         setTimeout(() => {
                             window.location.href = 'heart.html';
                         }, 15000);
